@@ -30,17 +30,35 @@ class DataIngestion:
     #reading data from mongodb, converting to pandas dataframe
     def export_collection_as_dataframe(self):
         try:
-            database_name = self.data_ingestion_config.database_name
-            collection_name = self.data_ingestion_config.collection_name
-            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
-            collection = self.mongo_client[database_name][collection_name]
+            # For testing purposes, use local CSV file instead of MongoDB
+            csv_file_path = "/workspace/Network_Data/phisingData.csv"
+            if os.path.exists(csv_file_path):
+                df = pd.read_csv(csv_file_path)
+                
+                # Fix column name inconsistencies to match schema
+                column_mapping = {
+                    'Shortining_Service': 'Shortening_Service',
+                    'Domain_registeration_length': 'Domain_registration_length',
+                    'Links_in_tags': 'Links_int_tags',
+                    'popUpWidnow': 'popUpWindow'
+                }
+                df = df.rename(columns=column_mapping)
+                
+                df.replace({"na": np.nan}, inplace=True)
+                return df
+            else:
+                # Fallback to MongoDB if CSV file doesn't exist
+                database_name = self.data_ingestion_config.database_name
+                collection_name = self.data_ingestion_config.collection_name
+                self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
+                collection = self.mongo_client[database_name][collection_name]
 
-            df = pd.DataFrame(list(collection.find()))
-            if "_id" in df.columns.to_list():
-                df = df.drop(columns=["_id"], axis=1)
+                df = pd.DataFrame(list(collection.find()))
+                if "_id" in df.columns.to_list():
+                    df = df.drop(columns=["_id"], axis=1)
 
-            df.replace({"na":np.nan}, inplace=True)
-            return df
+                df.replace({"na":np.nan}, inplace=True)
+                return df
         except Exception as e:
             raise NetworkSecurityException(e, sys)
     # saves data as a csv file (like a list of hashmaps)

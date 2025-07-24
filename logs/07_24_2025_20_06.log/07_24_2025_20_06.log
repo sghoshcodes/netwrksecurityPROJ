@@ -1,0 +1,13 @@
+[2025-07-24 20:06:44,342] 15 root - INFO - Initiate the data ingestion
+[2025-07-24 20:06:44,388] 83 root - INFO - Performed train test split on the dataframe
+[2025-07-24 20:06:44,389] 85 root - INFO - Exited split_data_as_train_test method of Data_Ingestion class
+[2025-07-24 20:06:44,389] 91 root - INFO - Exporting train and test file path
+[2025-07-24 20:06:44,416] 99 root - INFO - Exported train and test file path.
+[2025-07-24 20:06:44,419] 22 root - INFO - Initiate the data validation
+[2025-07-24 20:06:44,431] 31 root - INFO - Required number of columns: 31
+[2025-07-24 20:06:44,431] 32 root - INFO - Data frame has columns: 31
+[2025-07-24 20:06:44,431] 31 root - INFO - Required number of columns: 31
+[2025-07-24 20:06:44,431] 32 root - INFO - Data frame has columns: 31
+[2025-07-24 20:06:44,431] 51 root - INFO - Missing numerical columns: [[]]
+[2025-07-24 20:06:44,431] 51 root - INFO - Missing numerical columns: [[]]
+[2025-07-24 20:06:44,486] 137 root - INFO - Data validation artifact: DataValidationArtifact(validation_status=True, valid_train_file_path='Artifacts/07_24_2025_20_06_43/data_ingestion/ingested/train.csv', valid_test_file_path='Artifacts/07_24_2025_20_06_43/data_ingestion/ingested/test.csv', invalid_train_file_path=None, invalid_test_file_path=None, drift_report_file_path='Artifacts/07_24_2025_20_06_43/data_validation/drift_report/report.yaml')
