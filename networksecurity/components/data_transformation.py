@@ -88,7 +88,7 @@ class DataTransformation:
             data_transformation_artifact = DataTransformationArtifact(
                 transformed_object_file_path = self.data_transformation_config.transformed_object_file_path, 
                 transformed_train_file_path = self.data_transformation_config.transformed_train_file_path,
-                transformed_test_file_path = self.data_transformation_config.transformed_object_file_path
+                transformed_test_file_path = self.data_transformation_config.transformed_test_file_path
             )
             return data_transformation_artifact
 
