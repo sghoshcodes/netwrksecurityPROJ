@@ -41,11 +41,15 @@ class ModelTrainer:
             mlflow.log_metric("precision", classificationmetric.precision_score)
             mlflow.log_metric("recall_score", classificationmetric.recall_score)
         
-        # Updated to use 'name' instead of deprecated 'artifact_path'
+        # Try to log model, but handle DagsHub compatibility issues gracefully
+        try:
             mlflow.sklearn.log_model(
                 sk_model=best_model,
-                name="model"  # This replaces positional "model"
+                name="model"
             )
+        except Exception as e:
+            logging.warning(f"Could not log model to MLflow due to DagsHub compatibility: {e}")
+            logging.info("Model metrics were logged successfully, but model artifact logging was skipped")
 
         
     def train_model(self, x_train, y_train, x_test, y_test):

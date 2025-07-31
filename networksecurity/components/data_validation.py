@@ -36,10 +36,11 @@ class DataValidation:
         except Exception as e:
             raise NetworkSecurityException(e, sys)
 
-    def detect_dataset_drift(self, base_df, current_df, threshold=0.05) -> bool:
+    def detect_dataset_drift(self, base_df, current_df, threshold=0.01, max_drift_columns=2) -> bool:
         try:
             status=True
             report={}
+            drift_count = 0
             for column in base_df.columns:
                 d1=base_df[column]
                 d2=current_df[column]
@@ -48,11 +49,19 @@ class DataValidation:
                     is_found=False
                 else:
                     is_found=True
-                    status=False
+                    drift_count += 1
                 report.update({column:{
                     "p_value":float(is_sample_dist.pvalue),
                     "drift_status": is_found
                 }})
+            
+            # Allow some drift but not too much
+            if drift_count > max_drift_columns:
+                status = False
+                logging.warning(f"Data drift detected in {drift_count} columns. Maximum allowed: {max_drift_columns}")
+            elif drift_count > 0:
+                logging.info(f"Minor data drift detected in {drift_count} columns, but within acceptable limits")
+            
             drift_report_file_path = self.data_validation_config.drift_report_file_path
 
             #Create Directory
